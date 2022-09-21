@@ -29,7 +29,7 @@ jobs:
             docker tag reverseproxy tyronmbi/reverseproxy:v1
       - run:
           name: Connect to DockerHub
-          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          command: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Push images to DockerHub
           command: |
