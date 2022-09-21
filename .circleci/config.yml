@@ -1,0 +1,48 @@
+version: 2.1
+
+# Define the jobs we want to run for this project
+jobs:
+  build:
+    docker:
+      - image: cimg/node:16
+        auth:
+          username: tyronmbi
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run: 
+          name: Build concurrent images
+          command: |
+            docker-compose -f docker-compose-build.yaml build --parallel
+            docker images
+      - run:
+          name: Tag images
+          command: |
+            docker tag udagram-api-user tyronmbi/udagram-api-user:v1
+            docker tag udagram-api-feed tyronmbi/udagram-api-feed:v1
+            docker tag udagram-frontend tyronmbi/udagram-frontend:v1
+            docker tag reverseproxy tyronmbi/reverseproxy:v1
+      - run:
+          name: Push images to DockerHub
+          command: |
+            docker push tyronmbi/udagram-api-user:v1
+            docker push tyronmbi/udagram-api-feed:v1
+            docker push tyronmbi/udagram-frontend:v1
+            docker push tyronmbi/reverseproxy:v1
+  test:
+    docker:
+      - image: cimg/node:16
+        auth:
+          username: tyronmbi
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
+      - checkout
+      - run: |
+          echo "this is the test job"
+
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test
