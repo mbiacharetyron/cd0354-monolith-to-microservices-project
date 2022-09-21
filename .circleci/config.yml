@@ -6,7 +6,7 @@ jobs:
     docker:
       - image: cimg/node:16
         auth:
-          username: tyronmbi
+          username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
@@ -22,6 +22,9 @@ jobs:
             docker tag udagram-api-feed tyronmbi/udagram-api-feed:v1
             docker tag udagram-frontend tyronmbi/udagram-frontend:v1
             docker tag reverseproxy tyronmbi/reverseproxy:v1
+      - run:
+          name: Connect to DockerHub
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
       - run:
           name: Push images to DockerHub
           command: |
