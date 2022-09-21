@@ -34,7 +34,7 @@ jobs:
             docker push tyronmbi/reverseproxy:v1
   test:
     docker:
-      - image: cimg/node:16
+      - image: cimg/node:16.17.0
         auth:
           username: tyronmbi
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
