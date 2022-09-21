@@ -16,13 +16,16 @@ jobs:
           name: Build concurrent images
           command: |
             docker-compose -f docker-compose-build.yaml build --parallel
+      - run: 
+          name: Displaying Images Built
+          command: |
             docker images
       - run:
           name: Tag images
           command: |
             docker tag udagram-api-user tyronmbi/udagram-api-user:v1
             docker tag udagram-api-feed tyronmbi/udagram-api-feed:v1
-            docker tag udagram-frontend tyronmbi/udagram-frontend:v1
+            docker tag udagram-frontend:local tyronmbi/udagram-frontend:v1
             docker tag reverseproxy tyronmbi/reverseproxy:v1
       - run:
           name: Connect to DockerHub
